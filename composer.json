@@ -12,7 +12,9 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "5.*",
-        "illuminate/config": "5.*",
+        "illuminate/config": "5.*"
+    },
+    "replace": {
         "curl/curl": "dev-master"
     },
     "autoload": {
@@ -23,5 +25,5 @@
             "Latrell\\Wxpay\\": "src/Latrell/Wxpay/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }

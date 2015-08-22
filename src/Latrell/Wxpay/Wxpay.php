@@ -71,7 +71,7 @@ class Wxpay
 		$curl = new Curl();
 		$curl->get('https://api.weixin.qq.com/cgi-bin/ticket/getticket', [
 			'type' => 'jsapi',
-			'ticket' => $this->getAccessToken()
+			'access_token' => $this->getAccessToken()
 		]);
 		if ($curl->error) {
 			throw new WxPayException('curl错误：' . $curl->error_code);

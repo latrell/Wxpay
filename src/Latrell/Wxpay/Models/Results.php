@@ -1,6 +1,8 @@
 <?php
 namespace Latrell\Wxpay\Models;
 
+use Latrell\Wxpay\WxpayException;
+
 /**
  *
  * 接口调用结果类

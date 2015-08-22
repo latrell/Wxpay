@@ -1,6 +1,8 @@
 <?php
 namespace Latrell\Wxpay\Models;
 
+use Latrell\Wxpay\WxpayException;
+
 /**
  *
  * 数据对象基础类，该类中定义数据类最基本的行为，包括：

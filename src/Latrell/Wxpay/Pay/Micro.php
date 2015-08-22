@@ -1,6 +1,7 @@
 <?php
 namespace Latrell\Wxpay\Pay;
 
+use Latrell\Wxpay\WxpayException;
 use Latrell\Wxpay\Sdk\Api;
 use Latrell\Wxpay\Models\BizPayUrl;
 use Latrell\Wxpay\Models\CloseOrder;

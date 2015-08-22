@@ -16,9 +16,6 @@
         "curl/curl": "1.2.*"
     },
     "autoload": {
-        "classmap": [
-            "src/Latrell/Wxpay/Sdk/Exception.php"
-        ],
         "psr-4": {
             "Latrell\\Wxpay\\": "src/Latrell/Wxpay/"
         }

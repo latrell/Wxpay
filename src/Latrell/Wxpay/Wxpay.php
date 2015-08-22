@@ -1,7 +1,6 @@
 <?php
 namespace Latrell\Wxpay;
 
-use WxPayException;
 use Cache;
 use Curl\Curl;
 use Carbon\Carbon;

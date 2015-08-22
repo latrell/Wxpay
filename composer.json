@@ -12,7 +12,8 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "5.*",
-        "illuminate/config": "5.*"
+        "illuminate/config": "5.*",
+        "curl/curl": "dev-master"
     },
     "autoload": {
         "classmap": [

@@ -18,7 +18,7 @@ return [
 	 * 获取地址：https://mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN
 	 * @var string
 	 */
-	'APPID' => 'wx426b3015555a46be',
+	'appid' => 'wx426b3015555a46be',
 	'mchid' => '1225312702',
 	'key' => 'e10adc3949ba59abbe56e057f20f883e',
 	'appsecret' => '01c6d59a3f9024db6336662ac95c8e74',

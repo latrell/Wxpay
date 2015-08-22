@@ -1,4 +1,7 @@
 <?php
+namespace Latrell\Wxpay;
+
+use Exception;
 
 class WxpayException extends Exception
 {

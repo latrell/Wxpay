@@ -42,12 +42,15 @@ class Wxpay
 		}
 
 		$curl = new Curl();
-		$ret = $curl->get('https://api.weixin.qq.com/cgi-bin/token', [
+		$curl->get('https://api.weixin.qq.com/cgi-bin/token', [
 			'grant_type' => 'client_credential',
 			'appid' => $this->config['appid'],
 			'secret' => $this->config['appsecret']
 		]);
-		$json = json_decode($ret, true);
+		if ($curl->error) {
+			throw new WxPayException('curl错误：' . $curl->error_code);
+		}
+		$json = json_decode($curl->response, true);
 		if (key_exists('errcode', $json)) {
 			throw new WxPayException($json['errmsg'], $json['errcode']);
 		}
@@ -66,11 +69,14 @@ class Wxpay
 		}
 
 		$curl = new Curl();
-		$ret = $curl->get('https://api.weixin.qq.com/cgi-bin/ticket/getticket', [
+		$curl->get('https://api.weixin.qq.com/cgi-bin/ticket/getticket', [
 			'type' => 'jsapi',
 			'ticket' => $this->getAccessToken()
 		]);
-		$json = json_decode($ret, true);
+		if ($curl->error) {
+			throw new WxPayException('curl错误：' . $curl->error_code);
+		}
+		$json = json_decode($curl->response, true);
 		if ((int) $json['errcode'] > 0) {
 			throw new WxPayException($json['errmsg'], $json['errcode']);
 		}

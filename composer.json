@@ -1,0 +1,26 @@
+{
+    "name": "latrell/wxpay",
+    "description": "微信支付SDK在Laravel5封装包。",
+    "keywords": ["L5", "Laravel 5", "Laravel", "Wxpay", "Micropay", "Wxpay SDK", "Micropay SDK"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Latrell Chan",
+            "email": "i@latrell.me"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "5.*",
+        "illuminate/config": "5.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/Latrell/Wxpay/Sdk/Exception.php"
+        ],
+        "psr-4": {
+            "Latrell\\Wxpay\\": "src/Latrell/Wxpay/"
+        }
+    },
+    "minimum-stability": "stable"
+}

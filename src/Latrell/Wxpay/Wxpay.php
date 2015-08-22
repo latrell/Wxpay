@@ -100,7 +100,7 @@ class Wxpay
 			$params = join('&', $params);
 			$signature = sha1($params);
 
-			$cache = new stdClass();
+			$cache = new \stdClass();
 			$cache->timestamp = $data['timestamp'];
 			$cache->noncestr = $data['noncestr'];
 			$cache->signature = $signature;

@@ -13,7 +13,7 @@
         "php": ">=5.4.0",
         "illuminate/support": "5.*",
         "illuminate/config": "5.*",
-        "curl/curl": "dev-master"
+        "curl/curl": "1.2.*"
     },
     "autoload": {
         "classmap": [
@@ -23,5 +23,5 @@
             "Latrell\\Wxpay\\": "src/Latrell/Wxpay/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }

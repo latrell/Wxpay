@@ -16,6 +16,14 @@ class Wxpay
 		$this->config = $config;
 	}
 
+	public function getConfig($name = null)
+	{
+		if (is_null($name)) {
+			return $this->config;
+		}
+		return array_get($name, $this->config, null);
+	}
+
 	public function instance($type)
 	{
 		switch ($type) {

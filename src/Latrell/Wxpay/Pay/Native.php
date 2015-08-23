@@ -9,6 +9,16 @@ namespace Latrell\Wxpay\Pay;
 class Native
 {
 
+	protected $config;
+
+	protected $api;
+
+	public function __construct($config)
+	{
+		$this->config = $config;
+		$this->api = new Api($config);
+	}
+
 	/**
 	 *
 	 * 生成扫描支付URL,模式一
@@ -18,7 +28,7 @@ class Native
 	{
 		$biz = new WxPayBizPayUrl();
 		$biz->setProductId($productId);
-		$values = WxpayApi::bizpayurl($biz);
+		$values = $this->api->bizpayurl($biz);
 		$url = 'weixin://wxpay/bizpayurl?' . $this->toUrlParams($values);
 		return $url;
 	}
@@ -47,7 +57,7 @@ class Native
 	public function GetPayUrl($input)
 	{
 		if ($input->GetTrade_type() == 'NATIVE') {
-			$result = WxPayApi::unifiedOrder($input);
+			$result = $this->api->unifiedOrder($input);
 			return $result;
 		}
 	}

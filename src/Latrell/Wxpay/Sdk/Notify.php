@@ -11,6 +11,16 @@ use Latrell\Wxpay\Models\NotifyReply;
 class Notify extends NotifyReply
 {
 
+	protected $config;
+
+	protected $api;
+
+	public function __construct($config)
+	{
+		$this->config = $config;
+		$this->api = new Api($config);
+	}
+
 	/**
 	 *
 	 * 回调入口
@@ -20,7 +30,7 @@ class Notify extends NotifyReply
 	{
 		$msg = 'OK';
 		//当返回false的时候，表示notify中调用NotifyCallBack回调失败获取签名校验失败，此时直接回复失败
-		$result = WxpayApi::notify(array(
+		$result = $this->api->notify(array(
 			$this,
 			'NotifyCallBack'
 		), $msg);
@@ -85,6 +95,6 @@ class Notify extends NotifyReply
 		if ($needSign == true && $this->getReturnCode($return_code) == 'SUCCESS') {
 			$this->setSign();
 		}
-		WxpayApi::replyNotify($this->toXml());
+		$this->api->replyNotify($this->toXml());
 	}
 }

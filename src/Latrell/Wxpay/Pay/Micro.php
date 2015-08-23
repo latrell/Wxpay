@@ -34,6 +34,16 @@ use Latrell\Wxpay\Models\UnifiedOrder;
 class Micro
 {
 
+	protected $config;
+
+	protected $api;
+
+	public function __construct($config)
+	{
+		$this->config = $config;
+		$this->api = new Api($config);
+	}
+
 	/**
 	 *
 	 * 提交刷卡支付，并且确认结果，接口比较慢
@@ -44,7 +54,7 @@ class Micro
 	public function pay($input)
 	{
 		//①、提交被扫支付
-		$result = Api::micropay($input, 5);
+		$result = $this->api->micropay($input, 5);
 		//如果返回成功
 		if (! array_key_exists('return_code', $result) || ! array_key_exists('out_trade_no', $result) || ! array_key_exists('result_code', $result)) {
 			// echo '接口调用失败,请确认是否输入是否有误！';
@@ -95,7 +105,7 @@ class Micro
 	{
 		$input = new OrderQuery();
 		$input->setOutTradeNo($out_trade_no);
-		$result = Api::orderQuery($input);
+		$result = $this->api->orderQuery($input);
 
 		if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
 			//支付成功
@@ -135,7 +145,7 @@ class Micro
 
 		$clost_order = new Reverse();
 		$clost_order->setOutTradeNo($out_trade_no);
-		$result = Api::reverse($clost_order);
+		$result = $this->api->reverse($clost_order);
 
 		//接口调用失败
 		if ($result['return_code'] != 'SUCCESS') {

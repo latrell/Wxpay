@@ -38,10 +38,28 @@ class Micro
 
 	protected $api;
 
+	protected $input;
+
 	public function __construct($config)
 	{
 		$this->config = $config;
 		$this->api = new Api($config);
+
+		$this->input = new MicroPay();
+	}
+
+	public function __call($method, $arguments)
+	{
+		if (method_exists($this->input, $method)) {
+			return call_user_func_array([
+				$this->input,
+				$method
+			], $arguments);
+		}
+		return call_user_func_array([
+			$this,
+			$method
+		], $arguments);
 	}
 
 	/**
@@ -51,10 +69,10 @@ class Micro
 	 * @throws WxpayException
 	 * @return 返回查询接口的结果
 	 */
-	public function pay($input)
+	public function pay()
 	{
 		//①、提交被扫支付
-		$result = $this->api->micropay($input, 5);
+		$result = $this->api->micropay($this->input, 5);
 		//如果返回成功
 		if (! array_key_exists('return_code', $result) || ! array_key_exists('out_trade_no', $result) || ! array_key_exists('result_code', $result)) {
 			// echo '接口调用失败,请确认是否输入是否有误！';
@@ -62,7 +80,7 @@ class Micro
 		}
 
 		//签名验证
-		$out_trade_no = $input->getOutTradeNo();
+		$out_trade_no = $this->input->getOutTradeNo();
 
 		//②、接口调用成功，明确返回调用失败
 		if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'FAIL' && $result['err_code'] != 'USERPAYING' && $result['err_code'] != 'SYSTEMERROR') {

@@ -92,23 +92,24 @@ class Micro
 		}
 
 		//③、确认支付是否成功
-		$query_times = 10;
-		while ($query_times > 0) {
+		$start_time = time();
+		while (time() - $start_time < 30) {
 			$succ_result = 0;
 			$query_result = $this->query($out_trade_no, $succ_result);
-			//如果需要等待1s后继续
-			if ($succ_result == 2) {
-				sleep(2);
-				continue;
-			} elseif ($succ_result == 1) { //查询成功
-				return $query_result;
-			} else { //订单交易失败
-				break;
+			switch ($succ_result) {
+				case 0:
+					// 订单交易失败
+					break 2;
+				case 1:
+					// 查询成功
+					return $query_result;
+				case 2:
+					// 等待1s后继续
+					sleep(1);
 			}
-			$query_times --;
 		}
 
-		//④、次确认失败，则撤销订单
+		//④、确认失败，则撤销订单
 		if (! $this->cancel($out_trade_no)) {
 			throw new WxpayException('撤销单失败！');
 		}
@@ -157,30 +158,28 @@ class Micro
 	 *
 	 * 撤销订单，如果失败会重复调用10次
 	 * @param string $out_trade_no
-	 * @param 调用深度 $depth
 	 */
-	public function cancel($out_trade_no, $depth = 0)
+	public function cancel($out_trade_no)
 	{
-		if ($depth > 10) {
-			return false;
-		}
+		$depth = 0;
+		while ($depth ++ < 10) {
+			$input = new Reverse();
+			$input->setOutTradeNo($out_trade_no);
+			$result = $this->api->reverse($input);
 
-		$clost_order = new Reverse();
-		$clost_order->setOutTradeNo($out_trade_no);
-		$result = $this->api->reverse($clost_order);
-
-		//接口调用失败
-		if ($result['return_code'] != 'SUCCESS') {
-			return false;
-		}
-
-		//如果结果为success且不需要重新调用撤销，则表示撤销成功
-		if ($result['result_code'] != 'SUCCESS' && $result['recall'] == 'N') {
-			return true;
-		} else
-			if ($result['recall'] == 'Y') {
-				return $this->cancel($out_trade_no, ++ $depth);
+			//接口调用失败
+			if ($result['return_code'] != 'SUCCESS') {
+				continue;
 			}
+
+			//如果结果为success且不需要重新调用撤销，则表示撤销成功
+			if ($result['result_code'] != 'SUCCESS' && $result['recall'] == 'N') {
+				return true;
+			} elseif ($result['recall'] == 'Y') {
+				continue;
+			}
+			return false;
+		}
 		return false;
 	}
 }

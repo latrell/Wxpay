@@ -21,7 +21,7 @@ class Wxpay
 		if (is_null($name)) {
 			return $this->config;
 		}
-		return array_get($name, $this->config, null);
+		return array_get($this->config, $name, null);
 	}
 
 	public function instance($type)

@@ -76,7 +76,7 @@ class Micro
 		//如果返回成功
 		if (! array_key_exists('return_code', $result) || ! array_key_exists('out_trade_no', $result) || ! array_key_exists('result_code', $result)) {
 			// echo '接口调用失败,请确认是否输入是否有误！';
-			throw new WxpayException(array_key_exists('return_msg', $result) ? $result['return_msg'] : '接口调用失败！');
+			throw new WxpayException(array_key_exists('return_msg', $result) ? "{$result['return_code']}: {$result['return_msg']}" : '接口调用失败！');
 		}
 
 		//签名验证

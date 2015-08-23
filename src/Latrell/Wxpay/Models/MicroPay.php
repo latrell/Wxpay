@@ -64,6 +64,24 @@ class MicroPay extends Base
 	}
 
 	/**
+	 * 设置子商户的商户号
+	 * @param string $value
+	 **/
+	public function setSubMchId($value)
+	{
+		$this->values['sub_mch_id'] = $value;
+	}
+
+	/**
+	 * 获取子商户号的值
+	 * @return 值
+	 **/
+	public function getSubMchId()
+	{
+		return $this->values['sub_mch_id'];
+	}
+
+	/**
 	 * 设置终端设备号(商户自定义，如门店编号)
 	 * @param string $value
 	 **/

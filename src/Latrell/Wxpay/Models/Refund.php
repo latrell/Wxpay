@@ -64,6 +64,24 @@ class Refund extends Base
 	}
 
 	/**
+	 * 设置子商户的商户号
+	 * @param string $value
+	 **/
+	public function setSubMchId($value)
+	{
+		$this->values['sub_mch_id'] = $value;
+	}
+
+	/**
+	 * 获取子商户号的值
+	 * @return 值
+	 **/
+	public function getSubMchId()
+	{
+		return $this->values['sub_mch_id'];
+	}
+
+	/**
 	 * 设置微信支付分配的终端设备号，与下单一致
 	 * @param string $value
 	 **/

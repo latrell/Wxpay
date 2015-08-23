@@ -49,16 +49,13 @@ class Api
 		//检测必填参数
 		if (! $input->isOutTradeNoSet()) {
 			throw new WxPayException('缺少统一支付接口必填参数out_trade_no！');
-		} else
-			if (! $input->isBodySet()) {
-				throw new WxPayException('缺少统一支付接口必填参数body！');
-			} else
-				if (! $input->isTotalFeeSet()) {
-					throw new WxPayException('缺少统一支付接口必填参数total_fee！');
-				} else
-					if (! $input->IsTrade_typeSet()) {
-						throw new WxPayException('缺少统一支付接口必填参数trade_type！');
-					}
+		} elseif (! $input->isBodySet()) {
+			throw new WxPayException('缺少统一支付接口必填参数body！');
+		} elseif (! $input->isTotalFeeSet()) {
+			throw new WxPayException('缺少统一支付接口必填参数total_fee！');
+		} elseif (! $input->IsTrade_typeSet()) {
+			throw new WxPayException('缺少统一支付接口必填参数trade_type！');
+		}
 
 		//关联参数
 		if ($input->GetTrade_type() == 'JSAPI' && ! $input->IsOpenidSet()) {
@@ -75,19 +72,20 @@ class Api
 
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
 		$input->setSpbillCreateIp($_SERVER['REMOTE_ADDR']); //终端ip
 		//$input->setSpbillCreateIp('1.1.1.1');
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		//签名
 		$input->setSign();
 		$xml = $input->toXml();
 
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, false, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, false, $time_out);
 		$result = Results::Init($response);
-		self::reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
 
 
 		return $result;
@@ -111,16 +109,17 @@ class Api
 		}
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
 
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, false, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, false, $time_out);
 		$result = Results::Init($response);
-		self::reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
 
 
 		return $result;
@@ -144,16 +143,17 @@ class Api
 		}
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
 
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, false, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, false, $time_out);
 		$result = Results::Init($response);
-		self::reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
 
 
 		return $result;
@@ -175,30 +175,27 @@ class Api
 		//检测必填参数
 		if (! $input->isOutTradeNoSet() && ! $input->isTransactionIdSet()) {
 			throw new WxPayException('退款申请接口中，out_trade_no、transaction_id至少填一个！');
-		} else
-			if (! $input->isOutRefundNoSet()) {
-				throw new WxPayException('退款申请接口中，缺少必填参数out_refund_no！');
-			} else
-				if (! $input->isTotalFeeSet()) {
-					throw new WxPayException('退款申请接口中，缺少必填参数total_fee！');
-				} else
-					if (! $input->isRefundFeeSet()) {
-						throw new WxPayException('退款申请接口中，缺少必填参数refund_fee！');
-					} else
-						if (! $input->isOpUserIdSet()) {
-							throw new WxPayException('退款申请接口中，缺少必填参数op_user_id！');
-						}
+		} elseif (! $input->isOutRefundNoSet()) {
+			throw new WxPayException('退款申请接口中，缺少必填参数out_refund_no！');
+		} elseif (! $input->isTotalFeeSet()) {
+			throw new WxPayException('退款申请接口中，缺少必填参数total_fee！');
+		} elseif (! $input->isRefundFeeSet()) {
+			throw new WxPayException('退款申请接口中，缺少必填参数refund_fee！');
+		} elseif (! $input->isOpUserIdSet()) {
+			throw new WxPayException('退款申请接口中，缺少必填参数op_user_id！');
+		}
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, true, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, true, $time_out);
 		$result = Results::Init($response);
-		self::reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
 
 
 		return $result;
@@ -225,16 +222,17 @@ class Api
 		}
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
 
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, false, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, false, $time_out);
 		$result = Results::Init($response);
-		self::reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
 
 
 		return $result;
@@ -257,13 +255,14 @@ class Api
 		}
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
 
-		$response = self::postXmlCurl($xml, $url, false, $time_out);
+		$response = $this->postXmlCurl($xml, $url, false, $time_out);
 		if (substr($response, 0, 5) == '<xml>') {
 			return '';
 		}
@@ -296,16 +295,16 @@ class Api
 		$input->setSpbillCreateIp($_SERVER['REMOTE_ADDR']); //终端ip
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
-
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
 
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, false, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, false, $time_out);
 		$result = Results::Init($response);
-		self::reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
 
 
 		return $result;
@@ -329,16 +328,17 @@ class Api
 
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
 
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, true, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, true, $time_out);
 		$result = Results::Init($response);
-		self::reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
 
 
 		return $result;
@@ -375,16 +375,17 @@ class Api
 		}
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
 		$input->setUserIp($_SERVER['REMOTE_ADDR']); //终端ip
 		$input->setTime(date('YmdHis')); //商户上报时间
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
 
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, false, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, false, $time_out);
 		return $response;
 	}
 
@@ -405,8 +406,9 @@ class Api
 
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
 		$input->setTimeStamp(time()); //时间戳
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
@@ -435,16 +437,17 @@ class Api
 		}
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
-		$input->setNonceStr(self::getNonceStr()); //随机字符串
+		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
+		$input->setNonceStr($this->getNonceStr()); //随机字符串
 
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();
 
-		$start_time_stamp = self::getMillisecond(); //请求开始时间
-		$response = self::postXmlCurl($xml, $url, false, $time_out);
+		$start_time_stamp = $this->getMillisecond(); //请求开始时间
+		$response = $this->postXmlCurl($xml, $url, false, $time_out);
 		$result = Results::Init($response);
-		self::reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
+		$this->reportCostTime($url, $start_time_stamp, $result); //上报请求花费时间
 
 
 		return $result;
@@ -517,7 +520,7 @@ class Api
 		}
 
 		//上报逻辑
-		$endTimeStamp = self::getMillisecond();
+		$endTimeStamp = $this->getMillisecond();
 		$objInput = new Report();
 		$objInput->setInterfaceUrl($url);
 		$objInput->setExecuteTime($endTimeStamp - $start_time_stamp);
@@ -551,7 +554,7 @@ class Api
 		}
 
 		try {
-			self::report($objInput);
+			$this->report($objInput);
 		} catch (WxPayException $e) {
 			//不做任何处理
 		}

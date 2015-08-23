@@ -64,6 +64,24 @@ class ShortUrl extends Base
 	}
 
 	/**
+	 * 设置子商户的商户号
+	 * @param string $value
+	 **/
+	public function setSubMchId($value)
+	{
+		$this->values['sub_mch_id'] = $value;
+	}
+
+	/**
+	 * 获取子商户号的值
+	 * @return 值
+	 **/
+	public function getSubMchId()
+	{
+		return $this->values['sub_mch_id'];
+	}
+
+	/**
 	 * 设置需要转换的URL，签名用原串，传输需URL encode
 	 * @param string $value
 	 **/

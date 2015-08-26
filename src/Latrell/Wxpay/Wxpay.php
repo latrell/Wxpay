@@ -5,6 +5,8 @@ use Cache;
 use Curl\Curl;
 use Carbon\Carbon;
 use Request;
+use Latrell\Wxpay\Pay\Micro;
+use Latrell\Wxpay\Pay\Refund;
 
 class Wxpay
 {
@@ -22,24 +24,6 @@ class Wxpay
 			return $this->config;
 		}
 		return array_get($this->config, $name, null);
-	}
-
-	public function instance($type)
-	{
-		switch ($type) {
-			case 'jsapi':
-				return app('wxpay.jsapi');
-				break;
-			case 'micro':
-				return app('wxpay.micro');
-				break;
-			case 'native':
-				return app('wxpay.native');
-				break;
-			default:
-				throw new WxPayException('SDK只支持jsapi、micro和native三种！');
-				break;
-		}
 	}
 
 	public function getAccessToken()
@@ -121,5 +105,21 @@ class Wxpay
 		}
 
 		return $cache;
+	}
+
+	/**
+	 * 刷卡支付
+	 */
+	public function micro()
+	{
+		return new Micro($this->config);
+	}
+
+	/**
+	 * 申请退款
+	 */
+	public function refund()
+	{
+		return new Refund($this->config);
 	}
 }

@@ -77,16 +77,12 @@ class Micro
 		//如果返回成功
 		if (! array_key_exists('return_code', $result) || ! array_key_exists('result_code', $result)) {
 			// echo '接口调用失败,请确认是否输入是否有误！';
-			$message = '接口调用失败！';
-			if (array_key_exists('err_code_des', $result)) {
-				$message = $result['err_code_des'];
-			}
-			throw new WxpayException($message);
+			throw new WxpayException('接口调用失败！');
 		}
 
 		//②、接口调用成功，明确返回调用失败
 		if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'FAIL' && $result['err_code'] != 'USERPAYING' && $result['err_code'] != 'SYSTEMERROR') {
-			return false;
+			throw new WxpayException($result['err_code_des']);
 		}
 
 		//签名验证
@@ -146,7 +142,6 @@ class Micro
 		}
 
 		//如果返回错误码为“此交易订单号不存在”则直接认定失败
-		print_r($result);exit;
 		if (@$result['err_code'] == 'ORDERNOTEXIST') {
 			$succ_code = 0;
 		} else {

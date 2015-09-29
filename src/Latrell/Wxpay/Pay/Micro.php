@@ -73,8 +73,9 @@ class Micro
 	{
 		//①、提交被扫支付
 		$result = $this->api->micropay($this->input, 5);
+
 		//如果返回成功
-		if (! array_key_exists('return_code', $result) || ! array_key_exists('out_trade_no', $result) || ! array_key_exists('result_code', $result)) {
+		if (! array_key_exists('return_code', $result) || ! array_key_exists('result_code', $result)) {
 			// echo '接口调用失败,请确认是否输入是否有误！';
 			$message = '接口调用失败！';
 			if (array_key_exists('err_code_des', $result)) {
@@ -83,17 +84,17 @@ class Micro
 			throw new WxpayException($message);
 		}
 
-		//签名验证
-		$out_trade_no = $this->input->getOutTradeNo();
-
 		//②、接口调用成功，明确返回调用失败
 		if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'FAIL' && $result['err_code'] != 'USERPAYING' && $result['err_code'] != 'SYSTEMERROR') {
 			return false;
 		}
 
+		//签名验证
+		$out_trade_no = $this->input->getOutTradeNo();
+
 		//③、确认支付是否成功
 		$start_time = time();
-		while (time() - $start_time < 30) {
+		while (time() - $start_time <= 30) {
 			$succ_result = 0;
 			$query_result = $this->query($out_trade_no, $succ_result);
 			switch ($succ_result) {
@@ -131,8 +132,8 @@ class Micro
 		$result = $this->api->orderQuery($input);
 
 		if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
-			//支付成功
-			if ($result['trade_state'] == 'SUCCESS') {
+			//支付成功或用户取消支付
+			if ($result['trade_state'] == 'SUCCESS' || $result['trade_state'] == 'NOTPAY') {
 				$succ_code = 1;
 				return $result;
 			} else {
@@ -145,7 +146,8 @@ class Micro
 		}
 
 		//如果返回错误码为“此交易订单号不存在”则直接认定失败
-		if ($result['err_code'] == 'ORDERNOTEXIST') {
+		print_r($result);exit;
+		if (@$result['err_code'] == 'ORDERNOTEXIST') {
 			$succ_code = 0;
 		} else {
 			//如果是系统错误，则后续继续

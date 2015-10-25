@@ -94,13 +94,13 @@ class Micro
 			$succ_result = 0;
 			$query_result = $this->query($out_trade_no, $succ_result);
 			switch ($succ_result) {
-				case 0:
-					// 订单交易失败
-					break 2;
 				case 1:
-					// 查询成功
+					// 订单交易成功
 					return $query_result;
 				case 2:
+					// 订单交易失败
+					break 2;
+				default:
 					// 等待1s后继续
 					sleep(1);
 			}
@@ -119,7 +119,7 @@ class Micro
 	 * 查询订单情况
 	 * @param string $out_trade_no  商户订单号
 	 * @param int $succ_code         查询订单结果
-	 * @return 0 订单不成功，1表示订单成功，2表示继续等待
+	 * @return 0 状态不确定，1表示订单成功，2表示交易失败，3表示继续等待
 	 */
 	public function query($out_trade_no, &$succ_code)
 	{
@@ -127,27 +127,29 @@ class Micro
 		$input->setOutTradeNo($out_trade_no);
 		$result = $this->api->orderQuery($input);
 
+		$succ_code = 0;
 		if ($result['return_code'] == 'SUCCESS' && $result['result_code'] == 'SUCCESS') {
-			//支付成功或用户取消支付
-			if ($result['trade_state'] == 'SUCCESS' || $result['trade_state'] == 'NOTPAY') {
-				$succ_code = 1;
-				return $result;
-			} else {
-				//用户支付中
-				if ($result['trade_state'] == 'USERPAYING') {
+			switch ($result['trade_state']) {
+				case 'SUCCESS': // 支付成功
+					// 订单成功
+					$succ_code = 1;
+					break;
+				case 'REFUND': // 转入退款
+				case 'NOTPAY': // 未支付
+				case 'CLOSED': // 已关闭
+				case 'REVOKED': // 已撤销（刷卡支付）
+				case 'PAYERROR': // 支付失败（其他原因，如银行返回失败）
+					// 支付失败
 					$succ_code = 2;
+					break;
+				case 'USERPAYING': // 用户支付中
+					// 继续等待
+					$succ_code = 3;
 					return false;
-				}
 			}
+			return $result;
 		}
-
-		//如果返回错误码为“此交易订单号不存在”则直接认定失败
-		if (@$result['err_code'] == 'ORDERNOTEXIST') {
-			$succ_code = 0;
-		} else {
-			//如果是系统错误，则后续继续
-			$succ_code = 2;
-		}
+		// 执行到这里，就是网络或系统错误
 		return false;
 	}
 

@@ -432,7 +432,7 @@ class Api
 	{
 		$url = 'https://api.mch.weixin.qq.com/tools/shorturl';
 		//检测必填参数
-		if (! $input->IsLong_urlSet()) {
+		if (! $input->isLongUrlSet()) {
 			throw new WxPayException('需要转换的URL，签名用原串，传输需URL encode！');
 		}
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID

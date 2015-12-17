@@ -85,7 +85,7 @@ class ShortUrl extends Base
 	 * 设置需要转换的URL，签名用原串，传输需URL encode
 	 * @param string $value
 	 **/
-	public function SetLong_url($value)
+	public function setLongUrl($value)
 	{
 		$this->values['long_url'] = $value;
 	}
@@ -94,7 +94,7 @@ class ShortUrl extends Base
 	 * 获取需要转换的URL，签名用原串，传输需URL encode的值
 	 * @return 值
 	 **/
-	public function GetLong_url()
+	public function getLongUrl()
 	{
 		return $this->values['long_url'];
 	}
@@ -103,7 +103,7 @@ class ShortUrl extends Base
 	 * 判断需要转换的URL，签名用原串，传输需URL encode是否存在
 	 * @return true 或 false
 	 **/
-	public function IsLong_urlSet()
+	public function isLongUrlSet()
 	{
 		return array_key_exists('long_url', $this->values);
 	}

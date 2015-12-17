@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Request;
 use Latrell\Wxpay\Pay\Micro;
 use Latrell\Wxpay\Pay\Refund;
+use Latrell\Wxpay\Pay\Native;
 
 class Wxpay
 {
@@ -121,5 +122,13 @@ class Wxpay
 	public function refund()
 	{
 		return new Refund($this->config);
+	}
+
+	/**
+	 * 扫码支付
+	 */
+	public function native()
+	{
+		return new Native($this->config);
 	}
 }

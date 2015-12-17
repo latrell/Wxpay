@@ -1,6 +1,11 @@
 <?php
 namespace Latrell\Wxpay\Pay;
 
+use Latrell\Wxpay\WxpayException;
+use Latrell\Wxpay\Sdk\Api;
+use Latrell\Wxpay\Models\BizPayUrl;
+use Latrell\Wxpay\Models\ShortUrl;
+
 /**
  *
  * 刷卡支付实现类
@@ -24,9 +29,9 @@ class Native
 	 * 生成扫描支付URL,模式一
 	 * @param BizPayUrlInput $bizUrlInfo
 	 */
-	public function GetPrePayUrl($productId)
+	public function getPrePayUrl($productId)
 	{
-		$biz = new WxPayBizPayUrl();
+		$biz = new BizPayUrl();
 		$biz->setProductId($productId);
 		$values = $this->api->bizpayurl($biz);
 		$url = 'weixin://wxpay/bizpayurl?' . $this->toUrlParams($values);
@@ -60,5 +65,19 @@ class Native
 			$result = $this->api->unifiedOrder($input);
 			return $result;
 		}
+	}
+
+	/**
+	 * 转换短链接
+	 * @param string $url
+	 */
+	public function shortUrl($url){
+		$input = new ShortUrl();
+		$input->setLongUrl($url);
+		$values = $this->api->shorturl($input);
+		if($values['return_code'] === 'FAIL'){
+			throw new WxpayException($values['return_msg']);
+		}
+		return $values['short_url'];
 	}
 }

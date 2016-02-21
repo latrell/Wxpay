@@ -140,4 +140,12 @@ class Wxpay
 	{
 		return new Api($this->config);
 	}
+
+	/**
+	 * 通用通知
+	 */
+	public function notify()
+	{
+		return new Notify($this->config);
+	}
 }

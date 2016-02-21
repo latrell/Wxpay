@@ -58,10 +58,10 @@ class Api
 		}
 
 		//关联参数
-		if ($input->GetTrade_type() == 'JSAPI' && ! $input->isOpenidSet()) {
+		if ($input->getTradeType() == 'JSAPI' && ! $input->isOpenidSet()) {
 			throw new WxPayException('统一支付接口中，缺少必填参数openid！trade_type为JSAPI时，openid为必填参数！');
 		}
-		if ($input->GetTrade_type() == 'NATIVE' && ! $input->isProductIdSet()) {
+		if ($input->getTradeType() == 'NATIVE' && ! $input->isProductIdSet()) {
 			throw new WxPayException('统一支付接口中，缺少必填参数product_id！trade_type为JSAPI时，product_id为必填参数！');
 		}
 

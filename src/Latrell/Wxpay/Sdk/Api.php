@@ -53,12 +53,12 @@ class Api
 			throw new WxPayException('缺少统一支付接口必填参数body！');
 		} elseif (! $input->isTotalFeeSet()) {
 			throw new WxPayException('缺少统一支付接口必填参数total_fee！');
-		} elseif (! $input->IsTrade_typeSet()) {
+		} elseif (! $input->isTradeTypeSet()) {
 			throw new WxPayException('缺少统一支付接口必填参数trade_type！');
 		}
 
 		//关联参数
-		if ($input->GetTrade_type() == 'JSAPI' && ! $input->IsOpenidSet()) {
+		if ($input->GetTrade_type() == 'JSAPI' && ! $input->isOpenidSet()) {
 			throw new WxPayException('统一支付接口中，缺少必填参数openid！trade_type为JSAPI时，openid为必填参数！');
 		}
 		if ($input->GetTrade_type() == 'NATIVE' && ! $input->isProductIdSet()) {
@@ -66,8 +66,8 @@ class Api
 		}
 
 		//异步通知url未设置，则使用配置文件中的url
-		if (! $input->IsNotify_urlSet()) {
-			$input->SetNotify_url(Wxpay::getConfig('notify_url')); //异步通知url
+		if (! $input->isNotifyUrlSet()) {
+			$input->setNotifyUrl(Wxpay::getConfig('notify_url')); //异步通知url
 		}
 
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID

@@ -409,7 +409,7 @@ class UnifiedOrder extends Base
 	 * 设置接收微信支付异步通知回调地址
 	 * @param string $value
 	 **/
-	public function SetNotify_url($value)
+	public function setNotifyUrl($value)
 	{
 		$this->values['notify_url'] = $value;
 	}
@@ -418,7 +418,7 @@ class UnifiedOrder extends Base
 	 * 获取接收微信支付异步通知回调地址的值
 	 * @return 值
 	 **/
-	public function GetNotify_url()
+	public function getNotifyUrl()
 	{
 		return $this->values['notify_url'];
 	}
@@ -427,7 +427,7 @@ class UnifiedOrder extends Base
 	 * 判断接收微信支付异步通知回调地址是否存在
 	 * @return true 或 false
 	 **/
-	public function IsNotify_urlSet()
+	public function isNotifyUrlSet()
 	{
 		return array_key_exists('notify_url', $this->values);
 	}
@@ -436,7 +436,7 @@ class UnifiedOrder extends Base
 	 * 设置取值如下：JSAPI，NATIVE，APP，详细说明见参数规定
 	 * @param string $value
 	 **/
-	public function SetTrade_type($value)
+	public function setTradeType($value)
 	{
 		$this->values['trade_type'] = $value;
 	}
@@ -445,7 +445,7 @@ class UnifiedOrder extends Base
 	 * 获取取值如下：JSAPI，NATIVE，APP，详细说明见参数规定的值
 	 * @return 值
 	 **/
-	public function GetTrade_type()
+	public function getTradeType()
 	{
 		return $this->values['trade_type'];
 	}
@@ -454,7 +454,7 @@ class UnifiedOrder extends Base
 	 * 判断取值如下：JSAPI，NATIVE，APP，详细说明见参数规定是否存在
 	 * @return true 或 false
 	 **/
-	public function IsTrade_typeSet()
+	public function isTradeTypeSet()
 	{
 		return array_key_exists('trade_type', $this->values);
 	}
@@ -490,7 +490,7 @@ class UnifiedOrder extends Base
 	 * 设置trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。下单前需要调用【网页授权获取用户信息】接口获取到用户的Openid。
 	 * @param string $value
 	 **/
-	public function SetOpenid($value)
+	public function setOpenid($value)
 	{
 		$this->values['openid'] = $value;
 	}
@@ -499,7 +499,7 @@ class UnifiedOrder extends Base
 	 * 获取trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。下单前需要调用【网页授权获取用户信息】接口获取到用户的Openid。 的值
 	 * @return 值
 	 **/
-	public function GetOpenid()
+	public function getOpenid()
 	{
 		return $this->values['openid'];
 	}
@@ -508,7 +508,7 @@ class UnifiedOrder extends Base
 	 * 判断trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。下单前需要调用【网页授权获取用户信息】接口获取到用户的Openid。 是否存在
 	 * @return true 或 false
 	 **/
-	public function IsOpenidSet()
+	public function isOpenidSet()
 	{
 		return array_key_exists('openid', $this->values);
 	}

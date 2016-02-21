@@ -8,6 +8,7 @@ use Request;
 use Latrell\Wxpay\Pay\Micro;
 use Latrell\Wxpay\Pay\Refund;
 use Latrell\Wxpay\Pay\Native;
+use Latrell\Wxpay\Sdk\Api;
 
 class Wxpay
 {
@@ -130,5 +131,13 @@ class Wxpay
 	public function native()
 	{
 		return new Native($this->config);
+	}
+
+	/**
+	 * 核心API对象
+	 */
+	public function api()
+	{
+		return new Api($this->config);
 	}
 }

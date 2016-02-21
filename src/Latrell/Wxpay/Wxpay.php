@@ -9,6 +9,7 @@ use Latrell\Wxpay\Pay\Micro;
 use Latrell\Wxpay\Pay\Refund;
 use Latrell\Wxpay\Pay\Native;
 use Latrell\Wxpay\Sdk\Api;
+use Latrell\Wxpay\Sdk\Notify;
 
 class Wxpay
 {

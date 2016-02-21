@@ -42,7 +42,7 @@ class JsApiPay extends Base
 	 **/
 	public function setTimeStamp($value)
 	{
-		$this->values['timeStamp'] = $value;
+		$this->values['timeStamp'] = (string) $value;
 	}
 
 	/**

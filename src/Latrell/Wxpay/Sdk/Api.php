@@ -479,7 +479,7 @@ class Api
 			return false;
 		}
 
-		return call_user_func($callback, $result);
+		return call_user_func($callback, $result, $msg);
 	}
 
 	/**

@@ -67,7 +67,11 @@ class Api
 
 		//异步通知url未设置，则使用配置文件中的url
 		if (! $input->isNotifyUrlSet()) {
-			$input->setNotifyUrl(Wxpay::getConfig('notify_url')); //异步通知url
+			$notify_url = Wxpay::getConfig('notify_url');
+			if (! preg_match('#^https?://#i', $notify_url)) {
+				$notify_url = rtrim(config('app.url'), '/') . '/' . ltrim($notify_url, '/');
+			}
+			$input->setNotifyUrl($notify_url); //异步通知url
 		}
 
 		$input->setAppid(Wxpay::getConfig('appid')); //公众账号ID
@@ -297,6 +301,7 @@ class Api
 		$input->setMchId(Wxpay::getConfig('mchid')); //商户号
 		$input->setSubMchId(Wxpay::getConfig('sub_mch_id')); //子商户号
 		$input->setNonceStr($this->getNonceStr()); //随机字符串
+
 
 		$input->setSign(); //签名
 		$xml = $input->toXml();

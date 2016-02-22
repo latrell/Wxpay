@@ -135,7 +135,6 @@ class Micro
 					$succ_code = 1;
 					break;
 				case 'REFUND': // 转入退款
-				case 'NOTPAY': // 未支付
 				case 'CLOSED': // 已关闭
 				case 'REVOKED': // 已撤销（刷卡支付）
 				case 'PAYERROR': // 支付失败（其他原因，如银行返回失败）
@@ -143,6 +142,7 @@ class Micro
 					$succ_code = 2;
 					break;
 				case 'USERPAYING': // 用户支付中
+					case 'NOTPAY': // 未支付
 					// 继续等待
 					$succ_code = 3;
 					return false;

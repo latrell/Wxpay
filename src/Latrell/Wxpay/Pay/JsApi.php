@@ -3,6 +3,7 @@ namespace Latrell\Wxpay\Pay;
 
 use Latrell\Wxpay\Facades\Wxpay;
 use Latrell\Wxpay\WxpayException;
+use Latrell\Wxpay\Sdk\Api;
 
 /**
  *
